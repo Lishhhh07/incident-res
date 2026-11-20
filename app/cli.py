@@ -1,7 +1,8 @@
 import argparse
 import random
 
-from .game import play
+from .score import summary
+from .game import play, UNITS
 from .model import train
 from .patterns import patterns
 from .reports import DRILLS, TRAIN, sequences
@@ -20,12 +21,13 @@ def main():
     else:
         name = args.scenario or random.choice(list(DRILLS))
         print("Exercise:", name)
+        print("Dispatch guide:", ", ".join(f"{event}={unit}" for event, unit in UNITS.items()))
         try:
             results = play(DRILLS[name].split(), train())
         except (EOFError, KeyboardInterrupt):
             print("\nExercise ended.")
             return
-        print("Completed rounds:", len(results))
+        print(summary(results))
 
 
 if __name__ == "__main__":
